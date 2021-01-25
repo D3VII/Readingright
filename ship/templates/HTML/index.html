@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>View List</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="C:\Users\Devil\Desktop\intern\intern\ship\templates\HTML\css\style.css">
+    </head>
+    <body>
+        <div class="container mt-5">
+            <!-- top -->
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <h1>View Grocery List</h1>
+                </div>
+                
+                <div class="col-lg-6 float-right">
+                    <form action="/" method="POST">
+                        {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <!-- Date Filtering-->
+                            
+                            <input type="date" class="form-control" name="filterdate" >
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="submit" class="btn btn-danger" value="filter">
+                        </div>
+                        <div class="col-lg-4">
+                            <a href='/' style="text-decoration: underline;color: darkred;">reset</a>
+                        </div>
+                        {% if user.is_authenticated %}
+                Welcome {{request.user}}!!!
+                    <a href="/logout" style="text-decoration: underline;color: darkred;">Logout</a>
+                {% else %}
+                <div class="col-lg-1 mt-0" style="margin-right: 2px;">
+                    <a href="/login" style="text-decoration: underline;color: darkred;">Login</a>
+                </div>
+                <div class="col-lg-1 mt-0" style="margin-right: 2px;">
+                    <a href="/signup" style="text-decoration: underline;color: darkred;">Signup</a>
+                </div>
+                {% endif %}
+                    </div>
+                </form>
+                </div>
+                <a href="/add" target="blank">Add Item</a>
+            </div>
+            <!-- // top -->
+            <!-- Grocery Cards -->
+            <div class="row mt-4">
+                <!--- -->
+                <!-- Loop This -->
+                {% for product in product_list %}
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">{{ product.product_name}}</h5>
+                          <h6 class="card-subtitle mb-2 text-muted">{{product.product_quantity}}</h6>
+                          {% if product.status == 'BOUGHT' %}
+                          <p class="text-success">{{ product.status }}</p>
+                          {% endif %}
+                          {% if product.status == 'PENDING' %}
+                          <p class="text-warning">{{ product.status }}</p>
+                          {% endif %}
+                          {% if product.status == 'NOT AVAILABLE' %}
+                          <p class="text-danger">{{ product.status }}</p>
+                          {% endif %}
+                          <pre><a href="/update/{{ product.id }}">Update</a>            <a href="/{{ product.id }}">Delete</a></pre>
+
+                        </div>
+                      </div>
+                </div>
+                
+           {% endfor %}
+
+            </div>
+        </div>
+    </body>
+</html>
